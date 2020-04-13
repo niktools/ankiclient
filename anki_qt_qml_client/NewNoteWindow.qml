@@ -4,6 +4,7 @@ import QtQuick.Controls 2.14
 import QtQuick.Controls 1.4 as QC1
 
 Window {
+    id: newNoteWindow
     width: 300
     height: 200
 
@@ -95,8 +96,11 @@ Window {
             width: tagsTextField / 2
             text: "Add"
 
-            onPressed: noteModel.addNote(frontTextField.text, backTextField.text,
-                                         tagsTextField.text, deckCombobox.currentText)
+            onPressed: {
+                noteModel.addNote(frontTextField.text, backTextField.text,
+                                  tagsTextField.text, deckCombobox.currentText)
+                //newNoteWindow.close()
+            }
         }
     }
 }

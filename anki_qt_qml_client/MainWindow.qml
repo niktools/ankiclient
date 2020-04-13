@@ -38,11 +38,15 @@ ApplicationWindow {
         }
 
         QC1.ComboBox {
+            id: comboboxDecks
             width: 200
             height: parent.height
             anchors.left: addMultipleCardsButton.right
             textRole: "text" // Exact textRole is important otherwise it won't even call model.data()
             model: regDeckModel //[ "Banana", "Apple", "Coconut" ]
+            onCurrentIndexChanged: {
+                tableView.model.setFilterRegExp(regDeckModel.getDid(comboboxDecks.currentIndex))
+            }
         }
     }
 
