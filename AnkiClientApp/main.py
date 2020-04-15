@@ -1,19 +1,22 @@
-#!/usr/bin/env python
-# -*- conding: utf-8 -*-
-
 import os
 import sys
+import argparse
 from PySide2.QtGui import QGuiApplication
 from PySide2.QtQml import QQmlApplicationEngine
-from anki_client.ankirestclient import AnkiRestClient
+from AnkiClientLib.ankirestclient import AnkiRestClient
+
+from AnkiClientApp.anki_qt_models import *
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--server_url', dest='server_url')
+    parser.add_argument('--collection', dest='collection')
+    options = parser.parse_args()
+
+    anki_client = AnkiRestClient(options.server_url, options.collection)
     app = QGuiApplication(sys.argv)
     engine = QQmlApplicationEngine()
-
-    anki_client = AnkiRestClient("http://localhost:8051", "niknil1")
-
     note_model = NoteModel(anki_client)
     sorted_note_model = SortFilterNoteModel()
     sorted_note_model.setSourceModel(note_model)
@@ -31,7 +34,6 @@ def main():
         sys.exit(-1)
 
     app.exec_()
-
 
 if __name__ == '__main__':
     main()

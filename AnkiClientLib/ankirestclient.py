@@ -113,6 +113,8 @@ class AnkiRestClient:
 
     def __init__(self, server_url, collection):
         self.collection = collection
+        if server_url.endswith("/"):
+            server_url = server_url[:-1]
         self.server_url = server_url
 
     def __json_headers(self):
