@@ -104,12 +104,13 @@ class Note:
 
 class AnkiRestClient:
     class Action(Enum):
-        GET_NOTE = "get_note"
-        ADD_NOTE = "add_note"
-        FIND_NOTES = "find_notes"
-        LIST_DECKS = "list_decks"
-        SELECT_DECK = "select_deck"
-        FIND_CARDS = "find_cards"
+        GET_NOTE = ["note", ""]
+        ADD_NOTE = ["note", "add_note"]
+        DELETE_NOTE = ["note", "delete"]
+        FIND_NOTES = ["note", "find_notes"]
+        LIST_DECKS = ["deck", "list_decks"]
+        SELECT_DECK = ["deck", "select_deck"]
+        FIND_CARDS = ["card", "find_cards"]
 
     def __init__(self, server_url, collection):
         self.collection = collection
@@ -122,9 +123,15 @@ class AnkiRestClient:
                 "Accept": "application/json"}
 
     def __complete_url(self, action, resource_id=""):
-        complete_url = self.server_url + "/collection/" + self.collection + "/" + action.value
+        complete_url = self.server_url + "/collection/" + self.collection
+        resource_type = action.value[0]
+        resource_action = action.value[1]
+
         if resource_id:
+            complete_url += "/" + resource_type
             complete_url += "/" + str(resource_id)
+        complete_url += "/" + resource_action
+
         return complete_url
 
     def __post(self, action, resource_id="", data_dict={}):
@@ -143,6 +150,9 @@ class AnkiRestClient:
                                resource_id=nid)
         json_dict = response.json()
         return Note(data_dict=json_dict)
+
+    def delete_note(self, nid):
+        self.__post(action=self.Action.DELETE_NOTE, resource_id=nid)
 
     def add_note(self, note):
         response = self.__post(action=self.Action.ADD_NOTE,
@@ -187,9 +197,10 @@ class AnkiRestClient:
         notes = []
         for json_note in response.json():
             new_note = Note(data_dict=json_note)
-            new_note.did = nid_to_did_map[new_note.id]
+            new_note.did = 55#nid_to_did_map[new_note.id]
             notes.append(new_note)
         return notes
+
 
     # Useless?
     def select_deck(self, did):

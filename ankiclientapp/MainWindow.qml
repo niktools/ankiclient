@@ -9,7 +9,8 @@ ApplicationWindow {
     height: 480
 
     property variant addCardWindow;
-
+    property variant addDeckWindow;
+    
     background: Rectangle {
         color: "darkGray"
     }
@@ -20,7 +21,7 @@ ApplicationWindow {
         QC1.Button {
             id: addCardButton
             height: parent.height
-            width: 70
+            width: 80
             text: "Add"
             anchors.left: parent.left
             onClicked: {
@@ -32,16 +33,29 @@ ApplicationWindow {
         QC1.Button {
             id: addMultipleCardsButton
             height: parent.height
-            width: 110
-            text: "Add multiple"
+            width: 80
+            text: "Add cards"
             anchors.left: addCardButton.right
         }
+         QC1.Button {
+            id: addDeckButton
+            height: parent.height
+            width: 80
+            text: "Add deck"
+            anchors.left: addMultipleCardsButton.right
+            onClicked: {
+                var component = Qt.createComponent("NewDeckWindow.qml");
+                addDeckWindow = component.createObject(root);
+                addDeckWindow.show();
+            }
+        }
+
 
         QC1.ComboBox {
             id: comboboxDecks
             width: 200
             height: parent.height
-            anchors.left: addMultipleCardsButton.right
+            anchors.left: addDeckButton.right
             textRole: "text" // Exact textRole is important otherwise it won't even call model.data()
             model: regDeckModel //[ "Banana", "Apple", "Coconut" ]
             onCurrentIndexChanged: {
@@ -53,7 +67,7 @@ ApplicationWindow {
     QC1.TableView {
         id: tableView
         width: parent.width
-        height: parent.height/2
+        height: parent.height*0.8
         model: sortedNoteModel
         anchors.top: toolbar.bottom
         sortIndicatorVisible: true

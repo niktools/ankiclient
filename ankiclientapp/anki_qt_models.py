@@ -1,5 +1,5 @@
 from PySide2.QtCore import QSortFilterProxyModel, QAbstractListModel, Qt, Slot, QModelIndex, Signal
-
+from ankirestlib.anki_rest_client import *
 
 class DeckModel(QAbstractListModel):
     TextRole = Qt.UserRole + 1
