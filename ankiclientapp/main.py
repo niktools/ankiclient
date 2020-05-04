@@ -5,7 +5,7 @@ from PySide2.QtGui import QGuiApplication
 from PySide2.QtQml import QQmlApplicationEngine
 from ankirestlib.anki_rest_client import AnkiRestClient
 
-from ankiclientapp.anki_qt_models import *
+from anki_qt_models import *
 
 
 def main():
